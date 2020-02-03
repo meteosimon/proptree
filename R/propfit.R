@@ -37,6 +37,10 @@ make_score <- function(y) {
     }
 }
 
+get_prop <- function(logalpha) {
+    exp(logalpha) / sum(exp(coef))
+}
+
 propfit <- function(y, x = NULL, start = NULL, weights = NULL,
 		    offset = NULL, ...,
 		    estfun = FALSE, object = FALSE) {
@@ -57,7 +61,7 @@ propfit <- function(y, x = NULL, start = NULL, weights = NULL,
     names(coef) <- if (is.null(colnames(y))) paste0("y_", 1L:k) else colnames(y)
 
     # --- add proportions to optim object ---
-    opt$prop <- exp(coef) / sum(exp(coef))
+    opt$prop <- get_prop(coef)
 
     # --- logLik ---
     objfun <- if (conv) opt$value else Inf

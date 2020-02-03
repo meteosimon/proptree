@@ -31,13 +31,33 @@ if(FALSE) {
     names(d) <- paste0("y", 1:3)
     d$x <- jitter(x)
     tr <- proptree(y1 + y2 + y3 ~ x, data = d)
+
+    ###
+    data("ArcticLake", package = "DirichletReg")
+    tr <- proptree(sand + silt + clay ~ depth, data = ArcticLake)
 }
 
 
 # --- methods ---
-print.mvntree <- function(x, title = "Proportion tree",
+print.proptree <- function(x, title = "Proportion tree",
 			  objfun = "negative log-likelihood", ...) {
     partykit::print.modelparty(x, title = title, objfun = objfun, ...)
+}
+
+plot.proptree <- function(x, proportions = TRUE, ...) {
+    if (proportions) {
+	foo <- function(obj) {
+	    intr <- sprintf("n = %d", obj$nobs)
+            prop <- sprintf("%s: %0.1f %%", 
+	        names(coef(obj)),
+		round(exp(coef(obj)) / sum(exp(coef(obj))), 3) * 100
+	    )
+            c(intr, "-----------", prop)
+	}
+        partykit::plot.modelparty(x, FUN = foo, ...)
+    } else {
+        NextMethod()
+    }
 }
 
 
