@@ -38,7 +38,7 @@ make_score <- function(y) {
 }
 
 get_prop <- function(logalpha) {
-    exp(logalpha) / sum(exp(coef))
+    exp(logalpha) / sum(exp(logalpha))
 }
 
 propfit <- function(y, x = NULL, start = NULL, weights = NULL,
