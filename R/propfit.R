@@ -2,7 +2,8 @@ make_nllh <- function(y) {
     k <- ncol(y)
     n <- nrow(y)
     logy <- log(y)
-    function(alpha) {
+    function(logalpha) {
+	alpha <- exp(logalpha)
 	alpha_mat <- matrix(alpha - 1, ncol = k, nrow = n, byrow = TRUE)
         - n * lgamma(sum(alpha)) + n * sum(lgamma(alpha)) -
 	    sum(alpha_mat * logy)
@@ -14,7 +15,8 @@ make_grad <- function(y) {
     n <- nrow(y)
     logy <- log(y)
     sum_logy <- colSums(logy)
-    function(alpha) {
+    function(logalpha) {
+	alpha <- exp(logalpha)
 	rval <- numeric(k)
         sum_alpha <- sum(alpha)
         gr_j <- function(j) {
@@ -28,7 +30,8 @@ make_score <- function(y) {
     k <- ncol(y)
     n <- nrow(y)
     logy <- log(y)
-    function(alpha) {
+    function(logalpha) {
+	alpha <- exp(logalpha)    
         digamma_alpha <- digamma(sum(alpha)) - digamma(alpha)
         matrix(digamma_alpha, ncol = k, nrow = n, byrow = TRUE) + logy
     }
@@ -43,7 +46,7 @@ propfit <- function(y, x = NULL, start = NULL, weights = NULL,
     k <- ncol(y)
     nllh <- make_nllh(y)
     grad <- make_grad(y)
-    init <- exp(colMeans(y))
+    init <- colMeans(y)
     opt <- optim(init, nllh, grad, method = "BFGS", hessian = object)
 
     # --- check convergence ---
@@ -54,7 +57,7 @@ propfit <- function(y, x = NULL, start = NULL, weights = NULL,
     names(coef) <- if (is.null(colnames(y))) paste0("y_", 1L:k) else colnames(y)
 
     # --- add proportions to optim object ---
-    opt$prop <- coef / sum(coef)
+    opt$prop <- exp(coef) / sum(exp(coef))
 
     # --- logLik ---
     objfun <- if (conv) opt$value else Inf
