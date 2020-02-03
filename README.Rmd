@@ -1,0 +1,24 @@
+# proptree
+
+Compositional _or_ Proportional trees in R based on model based
+partiioning (MOB).
+
+## Getting started
+
+Install from GitHub:
+
+```r
+devtools::install_github("meteosimon/proptree")
+```
+
+## A first tree
+
+```{r}
+library("proptree")
+data("ArcticLake", package = "DirichletReg")
+tr <- proptree(sand + silt + clay ~ depth, data = ArcticLake)
+plot(tr)
+```
+
+
+
