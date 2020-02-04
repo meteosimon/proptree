@@ -1,4 +1,5 @@
 make_nllh <- function(y) {
+# --- helper: build neg-loglik function given data y ---
     k <- ncol(y)
     n <- nrow(y)
     logy <- log(y)
@@ -11,6 +12,7 @@ make_nllh <- function(y) {
 }
 
 make_grad <- function(y) {
+# --- helper: build gradient function given data y ---
     k <- ncol(y)
     n <- nrow(y)
     logy <- log(y)
@@ -27,6 +29,7 @@ make_grad <- function(y) {
 }
 
 make_score <- function(y) {
+# --- helper: build score function given data y ---
     k <- ncol(y)
     n <- nrow(y)
     logy <- log(y)
@@ -38,9 +41,31 @@ make_score <- function(y) {
 }
 
 get_prop <- function(logalpha) {
+# --- helper: compute proportions from logalphas ---
     exp(logalpha) / sum(exp(logalpha))
 }
 
+#' Fit Proportions.
+#'
+#' Maximum likelihood estimation of Dirichlet parameter.
+#'
+#' Perform MLE of parameters of a Dirichlet distribution.
+#' Interface and return value are designed to fit
+#' the modelparty infrastructure of the partykit package.
+#' ML estimates are found numerically using `optim` with
+#' BFGS algorithm.
+#'
+#' @param y A matrix or data.frame where each row corresponds to a k-dim observation.
+#' @param x Not used.
+#' @param start Not used.
+#' @param weights Not used yet.
+#' @param offset Not used.
+#' @param ... Not used yet.
+#' @param estfun logical. Should the matrix of score contributions (estimating
+#'    functions) be returned.
+#' @param object logical. Should the return from `optim()` be returned.
+#'
+#' @export
 propfit <- function(y, x = NULL, start = NULL, weights = NULL,
 		    offset = NULL, ...,
 		    estfun = FALSE, object = FALSE) {
@@ -51,7 +76,7 @@ propfit <- function(y, x = NULL, start = NULL, weights = NULL,
     nllh <- make_nllh(y)
     grad <- make_grad(y)
     init <- colMeans(y)
-    opt <- optim(init, nllh, grad, method = "BFGS", hessian = object)
+    opt <- stats::optim(init, nllh, grad, method = "BFGS", hessian = object)
 
     # --- check convergence ---
     conv <- opt$convergence == 0
@@ -83,14 +108,5 @@ propfit <- function(y, x = NULL, start = NULL, weights = NULL,
 	object = if (object) opt else NULL
     )
 }
-
-
-### propfit2 <- function(y, x = NULL, start = NULL, weights = NULL,
-###                     offset = NULL, ...,
-###                     estfun = FALSE, object = FALSE) {
-###     y <- as.matrix(y)
-###     y <- DR_data(y)
-###     DirichReg(y ~ 0)
-### }
 
 

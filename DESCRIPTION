@@ -5,5 +5,6 @@ Title: Regression Trees of Proportions
 Authors@R: c(person(given = "Thorsten", family = "Simon", role = c("aut", "cre"), email = "thorsten.simon@uibk.ac.at", comment = c(ORCID = "0000-0002-3778-7738")))
 Description: Estimating regression trees with multivariate proportion responses using a Dirichlet distribution with model-based recursive partitioning (MOB).
 Imports: stats, utils, partykit
+Suggests: DirichletReg
 License: GPL-2 | GPL-3
-
+RoxygenNote: 7.0.2
