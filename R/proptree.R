@@ -23,22 +23,26 @@
 #' @return An object of class `proptree` inheriting from `modelparty`.
 #' 
 #' @examples
-#'    ### --- toy data ---
-#'    set.seed(111)
-#'    n <- 500
-#'    x <- sample(c(-1, 1), n, replace = TRUE)
-#'    alpha <- cbind(rnorm(n, 1.4, sd = .1), rnorm(n, 1.4, sd = .1), jitter(2 + x))
-#'    y <- alpha / rowSums(alpha)
-#'    d <- as.data.frame(y)
-#'    names(d) <- paste0("y", 1:3)
-#'    d$x <- jitter(x)
-#'    tr <- proptree(y1 + y2 + y3 ~ x, data = d)
-#'    plot(tr)
+#' ### --- toy data ---
+#' set.seed(111)
+#' n <- 500
+#' x <- sample(c(-1, 1), n, replace = TRUE)
+#' alpha <- cbind(
+#'     rnorm(n, 1.4, sd = .1),
+#'     rnorm(n, 1.4, sd = .1),
+#'     jitter(2 + x)
+#' )
+#' y <- alpha / rowSums(alpha)
+#' d <- as.data.frame(y)
+#' names(d) <- paste0("y", 1:3)
+#' d$x <- jitter(x)
+#' tr <- proptree(y1 + y2 + y3 ~ x, data = d)
+#' plot(tr)
 #'
-#'    ### --- Sediment composition  ---
-#'    data("ArcticLake", package = "DirichletReg")
-#'    tr <- proptree(sand + silt + clay ~ depth, data = ArcticLake)
-#'    plot(tr)
+#' ### --- Sediment composition  ---
+#' data("ArcticLake", package = "DirichletReg")
+#' tr <- proptree(sand + silt + clay ~ depth, data = ArcticLake)
+#' plot(tr)
 #'
 #' @export
 proptree <- function(formula, data, na.action, ...) {
@@ -67,7 +71,6 @@ proptree <- function(formula, data, na.action, ...) {
 
 # --- methods ---
 
-#' @S3method print proptree
 #' @param x An object of class `proptree`.
 #' @param title character, title for print method.
 #' @param objfun character, labeling objective function.
@@ -78,7 +81,6 @@ print.proptree <- function(x, title = "Proportion tree",
     partykit::print.modelparty(x, title = title, objfun = objfun, ...)
 }
 
-#' @S3method plot proptree
 #' @param proportions logical, display proportions (default) or
 #'   log-alphas of Dirichlet distribution.
 #' @describeIn proptree plot method

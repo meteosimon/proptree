@@ -56,22 +56,26 @@ with the fitter `propfit()`.
 }}
 
 \examples{
-   ### --- toy data ---
-   set.seed(111)
-   n <- 500
-   x <- sample(c(-1, 1), n, replace = TRUE)
-   alpha <- cbind(rnorm(n, 1.4, sd = .1), rnorm(n, 1.4, sd = .1), jitter(2 + x))
-   y <- alpha / rowSums(alpha)
-   d <- as.data.frame(y)
-   names(d) <- paste0("y", 1:3)
-   d$x <- jitter(x)
-   tr <- proptree(y1 + y2 + y3 ~ x, data = d)
-   plot(tr)
+### --- toy data ---
+set.seed(111)
+n <- 500
+x <- sample(c(-1, 1), n, replace = TRUE)
+alpha <- cbind(
+    rnorm(n, 1.4, sd = .1),
+    rnorm(n, 1.4, sd = .1),
+    jitter(2 + x)
+)
+y <- alpha / rowSums(alpha)
+d <- as.data.frame(y)
+names(d) <- paste0("y", 1:3)
+d$x <- jitter(x)
+tr <- proptree(y1 + y2 + y3 ~ x, data = d)
+plot(tr)
 
-   ### --- Sediment composition  ---
-   data("ArcticLake", package = "DirichletReg")
-   tr <- proptree(sand + silt + clay ~ depth, data = ArcticLake)
-   plot(tr)
+### --- Sediment composition  ---
+data("ArcticLake", package = "DirichletReg")
+tr <- proptree(sand + silt + clay ~ depth, data = ArcticLake)
+plot(tr)
 
 }
 \seealso{

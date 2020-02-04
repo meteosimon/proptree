@@ -7,6 +7,9 @@ site: README.md
 doc:
 	Rscript -e 'devtools::document()'
 
+install:
+	Rscript -e 'devtools::install()'
+
 check:
 	Rscript -e 'devtools::check()'
 
